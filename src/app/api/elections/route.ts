@@ -1,0 +1,34 @@
+import { NextRequest } from "next/server";
+import { ElectionContract } from '@/lib/election';
+import { validateRequest } from "@/lib/validate";
+import { electionCreateSchema } from "@/schemas/elections/election-create-schema";
+import { Result } from "@/lib/result";
+import { convertObjectBigIntToString } from "@/lib/utils";
+
+export async function GET(req: NextRequest) {
+    try {
+        const elections = await ElectionContract.ActiveElections();
+        return Result.json(200, "success", convertObjectBigIntToString(elections));
+    } catch (error) {
+        return Result.json(500, (error as any)?.reason ?? 'Failure in fetching elections');
+    }
+}
+
+export async function POST(req: NextRequest) {
+    try {
+        const validation = await validateRequest(req, electionCreateSchema);
+
+        if (!validation.success) return validation.response;
+
+        const { name, description, startDate, endDate, active } = validation.data;
+        const u_startDate = Math.floor(new Date(startDate).getTime() / 1000);
+        const u_endDate = Math.floor(new Date(endDate).getTime() / 1000);
+        const tx = await ElectionContract.CreateElection(name, description, u_startDate, u_endDate, active);
+        await tx.wait();
+        if (!tx) throw new Error("Transaction failed");
+
+        return Result.json(201, "Election created successfully", { txHash: tx.hash });
+    } catch (error) {
+        return Result.json(500, (error as any)?.reason ?? 'Failed to create election');
+    }
+}

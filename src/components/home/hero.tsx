@@ -4,40 +4,41 @@ import { Vote, Shield, Users, BarChart3 } from "lucide-react"
 
 export function Hero() {
   return (
-    <section className="relative overflow-hidden bg-gradient-to-br from-blue-50 via-white to-purple-50 py-20 sm:py-32">
+    <section className="relative overflow-hidden bg-gradient-to-br from-blue-50 via-white to-purple-50 py-20 sm:py-32 max-h-screen">
       <div className="mx-auto max-w-7xl px-6 lg:px-8">
-        <div className="mx-auto max-w-2xl text-center">
-          <div className="mb-8 flex justify-center">
-            <div className="relative rounded-full px-3 py-1 text-sm leading-6 text-gray-600 ring-1 ring-gray-900/10 hover:ring-gray-900/20">
-              Decentralized voting on Conflux eSpace Testnet{" "}
-              <a href="#" className="font-semibold text-blue-600">
-                <span className="absolute inset-0" aria-hidden="true" />
-                Learn more <span aria-hidden="true">&rarr;</span>
-              </a>
-            </div>
-          </div>
-          <h1 className="text-4xl font-bold tracking-tight text-gray-900 sm:text-6xl">
-            Secure, Transparent
-            <span className="text-blue-600"> Blockchain Voting</span>
-          </h1>
-          <p className="mt-6 text-lg leading-8 text-gray-600">
-            Create and participate in decentralized elections with complete transparency, immutable records, and
-            cryptographic security. Built on Conflux eSpace for fast, low-cost transactions.
-          </p>
-          <div className="mt-10 flex items-center justify-center gap-x-6">
-            <Link href="/elections">
-              <Button size="lg" className="px-8">
-                <Vote className="mr-2 h-4 w-4" />
-                Start Voting
-              </Button>
-            </Link>
-            <Link href="/create">
-              <Button variant="outline" size="lg" className="px-8">
-                Create Election
-              </Button>
-            </Link>
+        {/* <div className="mx-auto max-w-2xl text-center"> */}
+        <div className="mb-8 flex justify-center">
+          <div className="relative rounded-full px-3 py-1 text-sm leading-6 text-gray-600 ring-1 ring-gray-900/10 hover:ring-gray-900/20">
+            Decentralized voting for Bangladesh {" "}
+            <a href="#" className="font-semibold text-blue-600">
+              <span className="absolute inset-0" aria-hidden="true" />
+              Learn more <span aria-hidden="true">&rarr;</span>
+            </a>
           </div>
         </div>
+        <h1 className="text-4xl font-bold tracking-tight text-gray-900 sm:text-6xl">
+          Secure, Transparent
+          <span className="text-blue-600"> Blockchain Voting</span>
+          <span className="text-green-600"> বাংলাদেশ </span>
+        </h1>
+        <p className="mt-6 text-lg leading-8 text-gray-600">
+          Create and participate in decentralized elections with complete transparency, immutable records, and
+          cryptographic security. Built on Etherium blockchain for fast, low-cost transactions.
+        </p>
+        <div className="mt-10 flex items-center justify-center gap-x-6">
+          <Link href="/login">
+            <Button size="lg" className="px-8">
+              <Vote className="mr-2 h-4 w-4" />
+              Login
+            </Button>
+          </Link>
+          <Link href="/election/create">
+            <Button variant="outline" size="lg" className="px-8">
+              Create Election
+            </Button>
+          </Link>
+        </div>
+        {/* </div> */}
 
         <div className="mt-16 flow-root sm:mt-24">
           <div className="grid grid-cols-2 gap-8 sm:grid-cols-4">
