@@ -1,22 +1,27 @@
 import { NextResponse } from "next/server";
 
-export class Result {
+export class Result<TData = unknown, TError = unknown> {
     public status: number;
     public message: string;
-    public data: any;
-    public error: any;
+    public data?: TData;
+    public error?: TError;
 
-    constructor(status: number, message: string, data: any = undefined, error: any = undefined) {
+    constructor(status: number, message: string, data?: TData, error?: TError) {
         this.status = status;
         this.message = message;
         this.data = data;
         this.error = error;
     }
 
-    public static json(status: number, message: string, data: any = undefined, error: any = undefined) {
+    public static json<TData = unknown, TError = unknown>(
+        status: number,
+        message: string,
+        data?: TData,
+        error?: TError
+    ) {
         return NextResponse.json(
-            new Result(status, message, data, error),
-            { status: status }
+            new Result<TData, TError>(status, message, data, error),
+            { status }
         );
     }
 }

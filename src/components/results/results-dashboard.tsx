@@ -1,6 +1,6 @@
 "use client"
 
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
+import { Card, CardContent } from "@/components/ui/card"
 import { BarChart3, TrendingUp, Users, Vote } from "lucide-react"
 import ResultChart from "./result-chart"
 

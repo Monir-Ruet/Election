@@ -4,13 +4,14 @@ import { validateRequest } from "@/lib/validate";
 import { electionCreateSchema } from "@/schemas/elections/election-create-schema";
 import { Result } from "@/lib/result";
 import { convertObjectBigIntToString } from "@/lib/utils";
+import { ContractError } from "@/types/error";
 
 export async function GET(req: NextRequest) {
     try {
         const elections = await ElectionContract.ActiveElections();
         return Result.json(200, "success", convertObjectBigIntToString(elections));
     } catch (error) {
-        return Result.json(500, (error as any)?.reason ?? 'Failure in fetching elections');
+        return Result.json(500, (error as ContractError)?.reason ?? 'Failure in fetching elections');
     }
 }
 
@@ -29,6 +30,6 @@ export async function POST(req: NextRequest) {
 
         return Result.json(201, "Election created successfully", { txHash: tx.hash });
     } catch (error) {
-        return Result.json(500, (error as any)?.reason ?? 'Failed to create election');
+        return Result.json(500, (error as ContractError)?.reason ?? 'Failed to create election');
     }
 }

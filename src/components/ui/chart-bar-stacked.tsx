@@ -1,7 +1,6 @@
 import { BadgeCheckIcon, TrendingUp } from "lucide-react"
 import { Badge } from "@/components/ui/badge"
 import { Bar, BarChart, CartesianGrid, LabelList, XAxis } from "recharts"
-import { cn } from "@/lib/utils"
 
 import {
   Card,

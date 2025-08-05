@@ -1,5 +1,4 @@
-import { CreateElectionForm } from "@/components/create/create-election-form"
-import axios from "axios";
+import { CreateElectionForm } from "@/components/election/create-election-form"
 
 export default function CreateElection() {
   return (

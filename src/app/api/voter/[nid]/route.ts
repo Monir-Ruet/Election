@@ -1,8 +1,9 @@
 import { NextRequest } from "next/server";
 import { ElectionContract } from '@/lib/election';
 import { Result } from "@/lib/result";
+import { ContractError } from "@/types/error";
 
-export async function GET(req: NextRequest, { params }: { params: { nid: string } }) {
+export async function GET(req: NextRequest, { params }: { params: Promise<{ nid: string }> }) {
     try {
         const { nid } = await params;
         if (!nid)
@@ -17,6 +18,6 @@ export async function GET(req: NextRequest, { params }: { params: { nid: string 
         return Result.json(200, "success", voter);
     }
     catch (error) {
-        return Result.json(500, (error as any)?.reason ?? 'Failed to retrieve voter');
+        return Result.json(500, (error as ContractError)?.reason ?? 'Failed to retrieve voter');
     }
 }

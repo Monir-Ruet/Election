@@ -2,8 +2,9 @@ import { NextRequest } from "next/server";
 import { ElectionContract } from '@/lib/election';
 import { Result } from "@/lib/result";
 import { convertObjectBigIntToString } from "@/lib/utils";
+import { ContractError } from '@/types/error';
 
-export async function GET(req: NextRequest, { params }: { params: { id: string } }) {
+export async function GET(req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
     try {
         const { id } = await params;
         if (!id)
@@ -18,6 +19,6 @@ export async function GET(req: NextRequest, { params }: { params: { id: string }
         return Result.json(200, "success", convertObjectBigIntToString(election));
     }
     catch (error) {
-        return Result.json(500, (error as any)?.reason ?? 'Failed to retrieve election');
+        return Result.json(500, (error as ContractError)?.reason ?? 'Failed to retrieve election');
     }
 }

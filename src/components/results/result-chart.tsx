@@ -43,8 +43,5 @@ export default function ResultChart() {
             <CarouselPrevious />
             <CarouselNext />
         </Carousel>
-        // <div className="bg-gray-50 py-8 flex flex-row justify-start overflow-scroll h-10/12">
-
-        // </div>
     );
 }

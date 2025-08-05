@@ -11,6 +11,7 @@ import { ElectionCreateForm, electionCreateSchema } from "@/schemas/elections/el
 import axios from "axios";
 import { toast } from "sonner"
 import { Textarea } from "@/components/ui/textarea"
+import { Result } from "@/lib/result"
 
 export function CreateElectionForm() {
   const {
@@ -23,15 +24,15 @@ export function CreateElectionForm() {
   });
 
   const onSubmit = async (data: ElectionCreateForm) => {
-    const promise = () => new Promise(async (resolve, reject) => {
+    const promise = () => new Promise<Result<unknown>>(async (resolve, reject) => {
       try {
-        let a = {
+        const election = {
           name: data.name,
           description: data.description,
           startDate: data.startDate,
           endDate: data.endDate,
         };
-        const response = await axios.post("/api/elections", JSON.stringify(a), {
+        const response = await axios.post<Result<unknown>>("/api/elections", JSON.stringify(election), {
           headers: {
             "Content-Type": "application/json",
           },
@@ -46,7 +47,7 @@ export function CreateElectionForm() {
       loading: 'Loading...',
       success: (data) => {
         reset();
-        return `${(data as any)?.message || "Election created successfully!"}`;
+        return `${data?.message || "Election created successfully!"}`;
       },
       error: 'Failed to create election. Please try again.',
     });
