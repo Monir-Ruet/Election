@@ -15,17 +15,16 @@ export function CreateElectionForm({ election }: { election: ElectionData | unde
     return (
         <Dialog>
             <DialogTrigger asChild>
-                <Button className="float-end bg-green-500 text-white font-bold" variant="outline">
+                <Button className="w-fit bg-green-500 text-white font-bold" variant="outline">
                     <Plus />
                     Create Election
                 </Button>
             </DialogTrigger>
             <DialogContent className="w-full">
                 <DialogHeader>
-                    <DialogTitle>Election</DialogTitle>
+                    <DialogTitle>Create Election</DialogTitle>
                     <DialogDescription>
-                        Make changes to your profile here. Click save when you&apos;re
-                        done.
+                        Create for a free and fare election.
                     </DialogDescription>
                 </DialogHeader>
                 <div className="py-8">

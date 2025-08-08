@@ -14,7 +14,6 @@ struct Election {
     uint startTime;
     uint endTime;
     uint candidateCount;
-    bool active;
     string name;
     string description;
 }
@@ -75,7 +74,7 @@ contract BCElection {
         v.image = image;
     }
 
-    function CreateElection(string memory name, string memory description, uint startTime, uint endTime, bool active)
+    function CreateElection(string memory name, string memory description, uint startTime, uint endTime)
         external onlyOwner {
         require(startTime < endTime && endTime > block.timestamp, "Invalid time");
 
@@ -86,14 +85,13 @@ contract BCElection {
             description: description,
             startTime: startTime,
             endTime: endTime,
-            active: active,
             candidateCount: 0
         });
 
         emit ElectionCreated(electionCount, name);
     }
 
-    function UpdateElection(uint id, string memory name, string memory description, uint startTime, uint endTime, bool active)
+    function UpdateElection(uint id, string memory name, string memory description, uint startTime, uint endTime)
         external onlyOwner electionExists(id) beforeElection(id) {
         require(startTime < endTime && endTime > block.timestamp, "Invalid time");
 
@@ -102,7 +100,6 @@ contract BCElection {
         e.description = description;
         e.startTime = startTime;
         e.endTime = endTime;
-        e.active = active;
 
         emit ElectionChanged(id);
     }
@@ -184,7 +181,7 @@ contract BCElection {
         return active;
     }
 
-    function ActiveElections() external view returns (Election[] memory) {
+    function RunningElections() external view returns (Election[] memory) {
         return _filterElections(1);
     }
 
@@ -206,9 +203,8 @@ contract BCElection {
 
         for (uint i = 1; i <= electionCount; ++i) {
             Election storage e = elections[i];
-            bool isActive = block.timestamp >= e.startTime && block.timestamp <= e.endTime && e.active;
-            if ((electionType == 1 && isActive) ||
-                 (electionType == 2 && (!e.active || block.timestamp > e.endTime)) ||
+            if ((electionType == 1 && block.timestamp >= e.startTime && block.timestamp <= e.endTime) ||
+                 (electionType == 2 && (block.timestamp > e.endTime)) ||
                  (electionType == 3 && block.timestamp < e.startTime)) {
                 ids[count++] = e.id;
             }

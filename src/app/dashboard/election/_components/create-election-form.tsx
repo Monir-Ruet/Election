@@ -22,6 +22,7 @@ export function ElectionForm({ election }: { election: ElectionData | undefined 
   } = useForm<ElectionCreateForm>({
     resolver: zodResolver(electionCreateSchema),
     defaultValues: {
+      id: election?.id ?? 0,
       name: election?.name ?? "",
       description: election?.description ?? "",
       startDate: election?.startDate

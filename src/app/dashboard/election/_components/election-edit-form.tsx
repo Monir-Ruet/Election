@@ -18,10 +18,9 @@ export function EditElectionForm({ election }: { election: ElectionData | undefi
             </DialogTrigger>
             <DialogContent className="w-full">
                 <DialogHeader>
-                    <DialogTitle>Election</DialogTitle>
+                    <DialogTitle>Edit Election</DialogTitle>
                     <DialogDescription>
-                        Make changes to your profile here. Click save when you&apos;re
-                        done.
+                        Edit for a free and fare election.
                     </DialogDescription>
                 </DialogHeader>
                 <div className="py-8">

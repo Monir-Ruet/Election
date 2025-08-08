@@ -32,7 +32,6 @@ export function ElectionCard(
                                         (
                                             <EditElectionForm election={election} />
                                         )
-
                                     }
 
                                 </CardAction>
