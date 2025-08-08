@@ -20,6 +20,6 @@ export const electionCreateSchema = z.object({
             message: "End date must be after start date",
         });
     }
-});;
+})
 
 export type ElectionCreateForm = z.infer<typeof electionCreateSchema>;

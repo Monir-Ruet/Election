@@ -72,8 +72,8 @@ describe("BCElection", () => {
     await tx.wait();
 
     const electionDetails = await election.ElectionById(1);
-    expect(electionDetails[1]).to.equal("National Election Bangladesh");
-    expect(electionDetails[2]).to.equal("desc");
+    expect(electionDetails[5]).to.equal("National Election Bangladesh");
+    expect(electionDetails[6]).to.equal("desc");
 
     const active = await election.ActiveElections();
     expect(active.length).to.equal(0);
@@ -94,7 +94,7 @@ describe("BCElection", () => {
     expect(candidates.length).to.equal(1);
 
     const candidate = await election.CandidateById(1, 1);
-    expect(candidate[1]).to.equal("Candidate A");
+    expect(candidate[3]).to.equal("Candidate A");
   });
 
   it("should update a candidate to election", async () => {
@@ -112,11 +112,11 @@ describe("BCElection", () => {
     expect(candidates.length).to.equal(1);
 
     const candidate = await election.CandidateById(1, 1);
-    expect(candidate[1]).to.equal("Candidate A");
+    expect(candidate[3]).to.equal("Candidate A");
     await election.UpdateCandidate(1, 1, "Candidate B", "image_url", true);
 
     const updatedCandidate = await election.CandidateById(1, 1);
-    expect(updatedCandidate[1]).to.equal("Candidate B");
+    expect(updatedCandidate[3]).to.equal("Candidate B");
   });
 
   it("should allow voting and track votes", async () => {
@@ -163,7 +163,7 @@ describe("BCElection", () => {
 
   it("should return archieved elections", async () => {
     const now = (await hre.ethers.provider.getBlock("latest"))!.timestamp;
-    const start = now;
+    const start = now + 1000;
     const end = start + 3600;
 
     await election.CreateElection("Live Election", "desc", start, end, false);

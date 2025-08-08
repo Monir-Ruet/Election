@@ -25,7 +25,7 @@ export default async function DashboardLayout({
                 <div className="w-full fixed backdrop-blur-md p-5">
                     <NavigationMenuBar />
                 </div>
-                <div className="mt-16">
+                <div className="mt-16 p-5">
                     {children}
                 </div>
             </main>

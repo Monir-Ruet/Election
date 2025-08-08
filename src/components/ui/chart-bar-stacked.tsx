@@ -1,4 +1,5 @@
-import { BadgeCheckIcon, TrendingUp } from "lucide-react"
+"use client"
+import { BadgeCheckIcon } from "lucide-react"
 import { Badge } from "@/components/ui/badge"
 import { Bar, BarChart, CartesianGrid, LabelList, XAxis } from "recharts"
 
@@ -67,11 +68,8 @@ export function ChartBarLabel(
         </ChartContainer>
       </CardContent>
       <CardFooter className="flex-col items-start gap-2 text-sm">
-        <div className="flex gap-2 leading-none font-medium">
-          Trending up by 5.2% this month <TrendingUp className="h-4 w-4" />
-        </div>
-        <div className="text-muted-foreground leading-none">
-          Showing total visitors for the last 6 months
+        <div className="mx-auto">
+          Bangladesh Election Commission
         </div>
       </CardFooter>
     </Card>
