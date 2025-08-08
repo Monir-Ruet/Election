@@ -5,15 +5,17 @@ import { electionCreateSchema } from "@/schemas/elections/election-create-schema
 import { Result } from "@/lib/result";
 import { convertObjectBigIntToString } from "@/lib/utils";
 import { ContractError } from "@/types/error";
+import { ElectionStructOutput } from "../../../../typechain-types/BCElection";
 
-export async function GET(req: NextRequest, { params }: { params: { type: number } }) {
+export async function GET(req: NextRequest, { params }: { params: Promise<{ type: number }> }) {
     try {
-        let elections: any[] = [];
-        if (params.type == 1)
+        const { type } = await params
+        let elections: ElectionStructOutput[] = [];
+        if (type == 1)
             elections = await ElectionContract.RunningElections();
-        else if (params.type == 2)
+        else if (type == 2)
             elections = await ElectionContract.ArchievedElections();
-        else if (params.type == 3)
+        else if (type == 3)
             elections = await ElectionContract.PendingElections();
         return Result.json(200, "success", convertObjectBigIntToString(elections));
     } catch (error) {
