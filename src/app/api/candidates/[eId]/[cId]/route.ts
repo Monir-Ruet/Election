@@ -14,7 +14,7 @@ export async function GET(
             return Result.json(400, "Election ID and Candidate ID are required");
         }
         const candidate = await ElectionContract.CandidateById(eId, cId);
-        if (!candidate || candidate[1] === "") {
+        if (!candidate || candidate[3] === "") {
             return Result.json(404, "Candidate not found");
         }
         return Result.json(201, `success`, convertObjectBigIntToString(candidate));

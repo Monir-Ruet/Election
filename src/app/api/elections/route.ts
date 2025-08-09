@@ -5,10 +5,18 @@ import { electionCreateSchema } from "@/schemas/elections/election-create-schema
 import { Result } from "@/lib/result";
 import { convertObjectBigIntToString } from "@/lib/utils";
 import { ContractError } from "@/types/error";
+import { ElectionStructOutput } from "../../../../typechain-types/BCElection";
 
-export async function GET(req: NextRequest) {
+export async function GET(req: NextRequest, { params }: { params: Promise<{ type: number }> }) {
     try {
-        const elections = await ElectionContract.ActiveElections();
+        const { type } = await params
+        let elections: ElectionStructOutput[] = [];
+        if (type == 1)
+            elections = await ElectionContract.RunningElections();
+        else if (type == 2)
+            elections = await ElectionContract.ArchievedElections();
+        else if (type == 3)
+            elections = await ElectionContract.PendingElections();
         return Result.json(200, "success", convertObjectBigIntToString(elections));
     } catch (error) {
         return Result.json(500, (error as ContractError)?.reason ?? 'Failure in fetching elections');
@@ -21,10 +29,10 @@ export async function POST(req: NextRequest) {
 
         if (!validation.success) return validation.response;
 
-        const { name, description, startDate, endDate, active } = validation.data;
+        const { name, description, startDate, endDate } = validation.data;
         const u_startDate = Math.floor(new Date(startDate).getTime() / 1000);
         const u_endDate = Math.floor(new Date(endDate).getTime() / 1000);
-        const tx = await ElectionContract.CreateElection(name, description, u_startDate, u_endDate, active);
+        const tx = await ElectionContract.CreateElection(name, description, u_startDate, u_endDate);
         await tx.wait();
         if (!tx) throw new Error("Transaction failed");
 
