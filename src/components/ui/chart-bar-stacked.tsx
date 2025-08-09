@@ -1,16 +1,6 @@
 "use client"
-import { BadgeCheckIcon } from "lucide-react"
-import { Badge } from "@/components/ui/badge"
 import { Bar, BarChart, CartesianGrid, LabelList, XAxis } from "recharts"
 
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card"
 import {
   ChartConfig,
   ChartContainer,
@@ -21,7 +11,7 @@ import {
 export const description = "A bar chart with a label"
 
 interface IChartData {
-  month: string
+  name: string
   count: number
 }
 
@@ -38,40 +28,18 @@ export function ChartBarLabel(
     className
   }: {
     chartData?: IChartData[]
-    className: string
+    className?: string
   }) {
   return (
-    <Card className={className}>
-      <CardHeader>
-        <div className="flex items-center justify-between">
-          <CardTitle>National Election 2025</CardTitle>
-          <Badge
-            variant="secondary"
-            className="bg-blue-500 text-white dark:bg-blue-600"
-          >
-            <BadgeCheckIcon /> Active
-          </Badge>
-        </div>
-
-        <CardDescription>National Election 2025</CardDescription>
-      </CardHeader>
-      <CardContent>
-        <ChartContainer config={chartConfig}>
-          <BarChart accessibilityLayer data={chartData} margin={{ top: 20 }}>
-            <CartesianGrid vertical={false} />
-            <XAxis dataKey="month" tickLine={false} tickMargin={10} axisLine={false} tickFormatter={(value) => value.slice(0, 3)} />
-            <ChartTooltip cursor={false} content={<ChartTooltipContent hideLabel />} />
-            <Bar dataKey="count" fill="var(--color-primary)" radius={8}>
-              <LabelList position="top" offset={12} className="fill-foreground" fontSize={12} />
-            </Bar>
-          </BarChart>
-        </ChartContainer>
-      </CardContent>
-      <CardFooter className="flex-col items-start gap-2 text-sm">
-        <div className="mx-auto">
-          Bangladesh Election Commission
-        </div>
-      </CardFooter>
-    </Card>
+    <ChartContainer className={className} config={chartConfig}>
+      <BarChart accessibilityLayer data={chartData} margin={{ top: 20 }}>
+        <CartesianGrid vertical={false} />
+        <XAxis dataKey="name" tickLine={false} axisLine={false} tickFormatter={(value) => value.slice(0, 5)} />
+        <ChartTooltip cursor={false} content={<ChartTooltipContent hideLabel />} />
+        <Bar dataKey="count" fill="var(--color-primary)" radius={8}>
+          <LabelList position="top" offset={12} className="fill-foreground" fontSize={12} />
+        </Bar>
+      </BarChart>
+    </ChartContainer>
   )
 }

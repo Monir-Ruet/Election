@@ -1,7 +1,13 @@
 import { Card, CardContent } from "@/components/ui/card";
 import { Vote, Users, TrendingUp } from "lucide-react";
+import { IElection } from "@/app/dashboard/election/_types/election";
 
-export default function ElectionResultCards() {
+export default function ElectionResultCards(
+    {
+        election
+    }: {
+        election: IElection,
+    }) {
     return (
         <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
             <Card>

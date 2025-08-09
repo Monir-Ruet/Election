@@ -1,31 +1,59 @@
-import { ElectionData } from "@/app/dashboard/election/_types/election";
-import ElectionResultCards from "./_components/result-card-components";
-import { ChartBarLabel } from "@/components/ui/chart-bar-stacked";
-import ElectionDetails from "./_components/election-details";
+import { IElection } from "@/app/dashboard/election/_types/election";
+import ElectionResultCards from "@/app/dashboard//election/[id]/_components/election-card-components";
+import ElectionDetails from "@/app/dashboard/election/[id]/_components/election-information";
+import Candidates from "../../candidate/_components/candidates-table";
+import { ICandidate } from "../../candidate/types/candidate";
 
-const election: ElectionData = {
+const election: IElection = {
     id: 4,
     name: "Bangladesh National Election",
-    startDate: 1754667450524,
-    endDate: 1754667450525,
+    startDate: 1754723576945,
+    endDate: 1754723546047,
     description: "Bangladesh National Election organized by bangladesh election commission"
 };
 
-const chart = [
-    { month: "January", count: 18 },
-    { month: "February", count: 305 },
-    { month: "March", count: 237 },
-    { month: "April", count: 73 },
-    { month: "May", count: 209 },
-    { month: "June", count: 214 },
-    { month: "June", count: 214 },
-    { month: "June", count: 214 },
-    { month: "June", count: 214 },
-    { month: "June", count: 214 },
-    { month: "June", count: 214 },
-    { month: "June", count: 214 },
-    { month: "June", count: 214 },
-    { month: "June", count: 214 }
+const candidates: ICandidate[] = [
+    {
+        voteCount: 1,
+        id: 0,
+        active: true,
+        name: "Monir Hossain",
+        image: "dsnala"
+    },
+    {
+        voteCount: 2,
+        id: 1,
+        active: true,
+        name: "Monir Hossain",
+        image: "dsnala"
+    },
+    {
+        voteCount: 2,
+        id: 1,
+        active: true,
+        name: "Monir Hossain",
+        image: "dsnala"
+    },
+    {
+        voteCount: 2,
+        id: 1,
+        active: true,
+        name: "Monir Hossain",
+        image: "dsnala"
+    }, {
+        voteCount: 2,
+        id: 1,
+        active: true,
+        name: "Monir Hossain",
+        image: "dsnala"
+    },
+    {
+        voteCount: 2,
+        id: 1,
+        active: true,
+        name: "Monir Hossain",
+        image: "dsnala"
+    }
 ]
 
 export default async function ElectionById({ params }: { params: Promise<{ id: string }> }) {
@@ -35,10 +63,11 @@ export default async function ElectionById({ params }: { params: Promise<{ id: s
             <div className="flex flex-col gap-5 mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
                 <ElectionDetails election={election} />
                 <div className="gap-5 flex flex-col">
-                    <ElectionResultCards />
-                    <div className="space-y-8 w-[80%] mx-auto">
-                        <ChartBarLabel className="w-full" chartData={chart} />
-                    </div>
+                    <ElectionResultCards election={election} />
+                </div>
+                <div className="flex flex-col gap-5">
+                    <p>Candidates</p>
+                    <Candidates candidates={candidates} />
                 </div>
             </div>
         </div>

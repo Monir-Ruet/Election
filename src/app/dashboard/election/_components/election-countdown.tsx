@@ -1,29 +1,17 @@
 'use client';
 
+import { Loader2 } from 'lucide-react';
 import { useEffect, useState } from 'react';
 
 type ElectionCountdownProps = {
-    startTime: string | number;
-    endTime: string | number;
+    now: number | null,
+    start: number | null;
+    end: number | null;
 };
 
-export function ElectionCountdown({ startTime, endTime }: ElectionCountdownProps) {
-    const [now, setNow] = useState<number | null>(null);
-
-    const start = typeof startTime === 'string' ? new Date(startTime).getTime() : startTime;
-    const end = typeof endTime === 'string' ? new Date(endTime).getTime() : endTime;
-
+export function ElectionCountdown({ now, start, end }: ElectionCountdownProps) {
     useEffect(() => {
-        setNow(Date.now());
-        const interval = setInterval(() => {
-            setNow(Date.now());
-        }, 1000);
-
-        return () => clearInterval(interval);
-    }, []);
-
-    useEffect(() => {
-        if (!now) return;
+        if (!now || !start || !end) return;
 
         let title = '';
         if (now < start) {
@@ -37,15 +25,17 @@ export function ElectionCountdown({ startTime, endTime }: ElectionCountdownProps
         document.title = title;
     }, [now, start, end]);
 
-    if (now === null) {
-        return <span className="text-gray-400">Loading...</span>;
+    if (now === null || start == null || end == null) {
+        return <span className="text-gray-400">
+            <Loader2 />
+        </span>;
     }
 
     if (now < start) {
         return (
             <div className='text-center'>
                 <div className="text-yellow-600 font-bold">Before Election</div>
-                <div className='font-stretch-125%'>{formatTimeDiff(end - now)}</div>
+                <div className='font-stretch-125%'>{formatTimeDiff(start - now)}</div>
             </div>
         );
     }

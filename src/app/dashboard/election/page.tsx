@@ -1,5 +1,5 @@
 import { ElectionListSection } from "./_components/election-section";
-import { CreateElectionForm } from "./_components/election-create-form";
+import { CreateElectionForm } from "./_components/create-election-modal";
 
 export default function CreateElection() {
     return (

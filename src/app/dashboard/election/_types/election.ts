@@ -1,5 +1,5 @@
 
-export interface ElectionData {
+export interface IElection {
     id: number
     name: string
     startDate: number

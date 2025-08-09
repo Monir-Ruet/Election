@@ -4,9 +4,10 @@ import { Edit, BadgeCheckIcon, View } from "lucide-react"
 import { Badge } from "@/components/ui/badge"
 import Link from "next/link"
 import { Button } from "@/components/ui/button"
-import { ElectionData } from "../_types/election"
+import { IElection } from "../_types/election"
 import { ElectionType } from "../_types/election-type"
-import { EditElectionForm } from "./election-edit-form"
+import { EditElectionForm } from "./edit-election-modal"
+import { CreateCandidateForm } from "../../candidate/_components/add-candidate-modal"
 
 export function ElectionCard(
     {
@@ -14,17 +15,16 @@ export function ElectionCard(
         type
     }:
         {
-            data: ElectionData[],
+            data: IElection[],
             type: ElectionType
         }) {
     return (
-        <div className="*:data-[slot=card]:from-primary/5 *:data-[slot=card]:to-card dark:*:data-[slot=card]:bg-card grid grid-cols-1 gap-4 *:data-[slot=card]:bg-gradient-to-t *:data-[slot=card]:shadow-xs @xl/main:grid-cols-2 @5xl/main:grid-cols-4">
+        <div className="flex flex-col gap-4 md:gap-6">
             {
                 data.map((election, index) => {
                     return (
                         <Card key={index} className="@container/card">
                             <CardHeader>
-                                <CardDescription className="line-clamp-2">{election.description}</CardDescription>
                                 <CardTitle className="text-2xl font-semibold tabular-nums @[250px]/card:text-3xl">{election.name}</CardTitle>
                                 <CardAction>
                                     {
@@ -33,14 +33,28 @@ export function ElectionCard(
                                             <EditElectionForm election={election} />
                                         )
                                     }
-
                                 </CardAction>
+                                <CardDescription className="line-clamp-2">{election.description}</CardDescription>
                             </CardHeader>
                             <CardFooter className="flex-col items-start gap-2.5 text-sm">
                                 <div className="flex flex-row gap-3">
                                     <Link href={`/dashboard/election/${election.id}`}>
                                         <Button>View</Button>
                                     </Link>
+                                    {
+                                        type === ElectionType.PENDING &&
+                                        (
+                                            <CreateCandidateForm election={election} />
+                                        )
+                                    }
+                                    {
+                                        type === ElectionType.RUNNING &&
+                                        (
+                                            <Link href={"/vote"}>
+                                                <Button className="w-fit bg-blue-500 text-white font-bold">Vote</Button>
+                                            </Link>
+                                        )
+                                    }
                                     <Badge
                                         variant="secondary"
                                         className={cn(type == ElectionType.RUNNING ? "bg-green-500" : (

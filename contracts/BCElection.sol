@@ -32,6 +32,7 @@ contract BCElection {
     mapping(uint => mapping(uint => Candidate)) private candidates;
     mapping(string => Voter) private voters;
     mapping(string => mapping(uint => uint)) private hasVoted;
+    string[] private voterNids;
 
     event ElectionCreated(uint indexed electionId, string name);
     event ElectionChanged(uint indexed electionId);
@@ -64,6 +65,7 @@ contract BCElection {
     function RegisterVoter(string memory nid, string memory name, string memory image) external onlyOwner {
         require(bytes(voters[nid].name).length == 0, "Already registered");
         voters[nid] = Voter(nid, name, image);
+        voterNids.push(nid);
     }
 
     function UpdateVoter(string memory nid, string memory name, string memory image) external onlyOwner {
@@ -142,6 +144,23 @@ contract BCElection {
     // ---------------------------
     // Views
     // ---------------------------
+    function GetVoters(uint offset) external view returns (Voter[] memory) {
+        uint limit = 25;
+        require(offset < voterNids.length, "Offset out of range");
+        uint end = offset + limit;
+        if (end > voterNids.length) {
+            end = voterNids.length;
+        }
+        uint size = end - offset;
+        Voter[] memory result = new Voter[](size);
+
+        for (uint i = 0; i < size; i++) {
+            result[i] = voters[voterNids[offset + i]];
+        }
+
+        return result;
+    }
+
     function VoterByNid(string memory nid) external view returns (Voter memory) {
         return voters[nid];
     }

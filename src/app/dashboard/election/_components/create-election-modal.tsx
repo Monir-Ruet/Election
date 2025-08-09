@@ -1,6 +1,5 @@
 import { ElectionForm } from "@/app/dashboard/election/_components/create-election-form"
-import { Edit } from "lucide-react"
-import { ElectionData } from "../_types/election"
+import { Button } from "@/components/ui/button"
 import {
     Dialog,
     DialogContent,
@@ -9,18 +8,23 @@ import {
     DialogTitle,
     DialogTrigger,
 } from "@/components/ui/dialog"
+import { Plus } from "lucide-react"
+import { IElection } from "../_types/election"
 
-export function EditElectionForm({ election }: { election: ElectionData | undefined }) {
+export function CreateElectionForm({ election }: { election: IElection | undefined }) {
     return (
         <Dialog>
             <DialogTrigger asChild>
-                <Edit size={17} />
+                <Button className="w-fit bg-green-500 text-white font-bold" variant="outline">
+                    <Plus />
+                    Create Election
+                </Button>
             </DialogTrigger>
             <DialogContent className="w-full">
                 <DialogHeader>
-                    <DialogTitle>Edit Election</DialogTitle>
+                    <DialogTitle>Create Election</DialogTitle>
                     <DialogDescription>
-                        Edit for a free and fare election.
+                        Create for a free and fare election.
                     </DialogDescription>
                 </DialogHeader>
                 <div className="py-8">

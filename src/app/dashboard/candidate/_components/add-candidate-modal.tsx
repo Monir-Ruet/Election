@@ -1,4 +1,3 @@
-import { ElectionForm } from "@/app/dashboard/election/_components/create-election-form"
 import { Button } from "@/components/ui/button"
 import {
     Dialog,
@@ -9,26 +8,27 @@ import {
     DialogTrigger,
 } from "@/components/ui/dialog"
 import { Plus } from "lucide-react"
-import { ElectionData } from "../_types/election"
+import { IElection } from "@/app/dashboard/election/_types/election"
+import { CandidateForm } from "@/app/dashboard/candidate/_components/candidate-form"
 
-export function CreateElectionForm({ election }: { election: ElectionData | undefined }) {
+export function CreateCandidateForm({ election }: { election: IElection }) {
     return (
         <Dialog>
             <DialogTrigger asChild>
-                <Button className="w-fit bg-green-500 text-white font-bold" variant="outline">
+                <Button className="w-fit bg-green-500 text-white font-bold">
                     <Plus />
-                    Create Election
+                    Candidate
                 </Button>
             </DialogTrigger>
             <DialogContent className="w-full">
                 <DialogHeader>
-                    <DialogTitle>Create Election</DialogTitle>
+                    <DialogTitle>Add Candidates</DialogTitle>
                     <DialogDescription>
-                        Create for a free and fare election.
+                        Add the participants for the election titled {election.name}
                     </DialogDescription>
                 </DialogHeader>
                 <div className="py-8">
-                    <ElectionForm election={election} />
+                    <CandidateForm election={election} />
                 </div>
             </DialogContent>
         </Dialog>

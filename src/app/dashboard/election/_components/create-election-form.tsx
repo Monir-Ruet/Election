@@ -10,9 +10,9 @@ import axios from "axios";
 import { toast } from "sonner"
 import { Textarea } from "@/components/ui/textarea"
 import { Result } from "@/lib/result"
-import { ElectionData } from "../_types/election"
+import { IElection } from "../_types/election"
 
-export function ElectionForm({ election }: { election: ElectionData | undefined }) {
+export function ElectionForm({ election }: { election: IElection | undefined }) {
   const isCreateForm = !election;
   const {
     register,

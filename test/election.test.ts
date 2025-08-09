@@ -171,4 +171,12 @@ describe("BCElection", () => {
     const active = await election.PendingElections();
     expect(active.length).to.equal(1);
   });
+
+  it("should return voters with offset", async () => {
+    await election.RegisterVoter("1234", "Alice", "fake_image_url");
+    await election.RegisterVoter("1235", "Bob", "fake_image_url");
+    await election.RegisterVoter("1236", "Alice", "fake_image_url");
+    let voters = await election.GetVoters(0);
+    expect(voters.length).to.equal(3);
+  });
 });

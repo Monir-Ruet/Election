@@ -63,7 +63,7 @@ export function ElectionListSection() {
         runningElections.length > 0 &&
         (
           <div className="flex flex-col gap-4 md:gap-6">
-            <h2 className="text-2xl font-semibold">Running Elections</h2>
+            <h2 className="text-2xl font-semibold text-green-500">Running Elections</h2>
             <ElectionCard data={runningElections} type={ElectionType.RUNNING} />
           </div>
         )
@@ -73,7 +73,7 @@ export function ElectionListSection() {
         pendingElections.length > 0 &&
         (
           <div className="flex flex-col gap-4 md:gap-6">
-            <h2 className="text-2xl font-semibold">Pending Elections</h2>
+            <h2 className="text-2xl font-semibold text-yellow-500">Pending Elections</h2>
             <ElectionCard data={pendingElections} type={ElectionType.PENDING} />
           </div>
         )
@@ -83,7 +83,7 @@ export function ElectionListSection() {
         archievedElections.length > 0 &&
         (
           <div className="flex flex-col gap-4 md:gap-6">
-            <h2 className="text-2xl font-semibold">Archieved Elections</h2>
+            <h2 className="text-2xl font-semibold text-red-500">Archieved Elections</h2>
             <ElectionCard data={archievedElections} type={ElectionType.ARCHIVED} />
           </div>
         )
