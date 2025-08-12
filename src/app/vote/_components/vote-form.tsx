@@ -22,7 +22,7 @@ export default function VoteForm({
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
-        let voteResult = await Vote(nid, election.id.toString(), candidateId);
+        const voteResult = await Vote(nid, election.id.toString(), candidateId);
         if (voteResult)
             toast.success("Vote complete");
         else toast.error("Vote failed");

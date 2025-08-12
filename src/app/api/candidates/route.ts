@@ -14,8 +14,8 @@ export async function GET(req: NextRequest) {
         if (!electionId || isNaN(electionId))
             return Result.json(400, "Invalid request");
         const candidates = await ElectionContract.CandidatesByElection(electionId);
-        let convertedCandidates = convertObjectBigIntToString(candidates);
-        const mappedCandidates: ICandidate[] = convertedCandidates.map((e: any) => {
+        const convertedCandidates = convertObjectBigIntToString(candidates);
+        const mappedCandidates = convertedCandidates.map((e) => {
             return {
                 voteCount: Number(e[0]),
                 id: Number(e[1]),

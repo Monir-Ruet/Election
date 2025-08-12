@@ -10,13 +10,13 @@ import { ICandidate } from "@/app/dashboard/candidate/types/candidate";
 
 export default async function ElectionById({ params }: { params: Promise<{ id: string }> }) {
     const { id } = await params;
-    let election: Result<IElection> = await GetElectionById(Number(id));
-    let candidates: Result<ICandidate[]> = await GetCandidatesByElectionId(Number(id));
+    const election: Result<IElection> = await GetElectionById(Number(id));
+    const candidates: Result<ICandidate[]> = await GetCandidatesByElectionId(Number(id));
     if (!election?.data || !candidates?.data) {
         return NextResponse.redirect(new URL("/not found"))
     }
-    let electionData = election.data;
-    let candidatesData = candidates.data ?? [];
+    const electionData = election.data;
+    const candidatesData = candidates.data ?? [];
 
     return (
         <div className="min-h-screen py-8">

@@ -20,8 +20,8 @@ export async function GET(req: NextRequest) {
             elections = await ElectionContract.ArchievedElections();
         else if (type == 3)
             elections = await ElectionContract.PendingElections();
-        let convertedElections = convertObjectBigIntToString(elections);
-        const mappedElections: IElection[] = convertedElections.map((e: any) => {
+        const convertedElections = convertObjectBigIntToString(elections);
+        const mappedElections: IElection[] = convertedElections.map((e) => {
             return {
                 id: Number(e[0]),
                 startTime: Number(e[1]),

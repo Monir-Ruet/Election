@@ -1,8 +1,9 @@
-import { ElectionCard } from "@/app/dashboard/election/_components/election-card";
-import { ElectionType } from "@/app/dashboard/election/_types/election-type";
 import { Result } from "@/lib/result";
 import { fetchElections } from "@/services/election-service";
 import { IElection } from "../_types/election";
+import { ElectionType } from "../_types/election-type";
+import { ElectionCard } from "./election-card";
+
 
 export async function ElectionListSection() {
   const runningElections: Result<IElection[]> = await fetchElections(1);

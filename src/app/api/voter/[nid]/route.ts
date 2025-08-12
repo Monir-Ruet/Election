@@ -17,7 +17,7 @@ export async function GET(req: NextRequest, { params }: { params: Promise<{ nid:
             return Result.json(404, "Voter not found");
         }
 
-        let convertedVoter = convertObjectBigIntToString(voter);
+        const convertedVoter = convertObjectBigIntToString(voter);
         const mappedVoter: IVoter = {
             nid: convertedVoter[0],
             name: convertedVoter[1],

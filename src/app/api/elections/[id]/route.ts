@@ -15,8 +15,8 @@ export async function GET(req: NextRequest, { params }: { params: Promise<{ id: 
         if (!election || election.name === "") {
             return Result.json(404, "Election not found");
         }
-        let e = convertObjectBigIntToString(election);
-        let mappedElection = {
+        const e = convertObjectBigIntToString(election);
+        const mappedElection = {
             id: Number(e[0]),
             startTime: Number(e[1]),
             endTime: Number(e[2]),
