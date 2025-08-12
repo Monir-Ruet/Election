@@ -1,3 +1,5 @@
+'use client'
+
 import { Button } from "@/components/ui/button"
 import { ChartBarLabel } from "@/components/ui/chart-bar-stacked"
 import {
@@ -10,20 +12,35 @@ import {
 import { IElection } from "../../_types/election"
 import { ICandidate } from "@/app/dashboard/candidate/types/candidate"
 import { GetCandidatesByElectionId } from "@/services/election-service"
+import { useEffect, useState } from "react"
 
-export async function ElectionResult({
+interface Chart {
+    name: string,
+    count: number
+}
+
+export function ElectionResult({
     election,
 }: {
     election: IElection,
 }) {
-    const candidates: ICandidate[] = (await GetCandidatesByElectionId(election.id)).data;
+    const [candidates, setCandidates] = useState<ICandidate[]>([]);
+    const [chartData, setChartData] = useState<Chart[]>([]);
 
-    const chartData = candidates?.map(candidate => {
-        return {
-            name: candidate.name,
-            count: candidate.voteCount
-        }
-    })
+    useEffect(() => {
+        GetCandidatesByElectionId(election.id).then(res => {
+            let candidateData: ICandidate[] = res.data
+            setCandidates(candidateData)
+            let data = candidateData?.map(candidate => {
+                return {
+                    name: candidate.name,
+                    count: candidate.voteCount
+                }
+            })
+            setChartData(data)
+        })
+    }, [])
+
     return (
         <Dialog>
             <DialogTrigger asChild>

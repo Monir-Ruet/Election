@@ -6,7 +6,7 @@ import { AlertCircleIcon, Loader2 } from "lucide-react";
 import { useState } from "react";
 import { Label } from "@radix-ui/react-label";
 import { IElection } from "@/app/dashboard/election/_types/election";
-import { useRouter } from "next/navigation";
+import { redirect } from "next/navigation";
 import { VoterByNid } from "@/services/voter-service";
 
 export default function VoterLogin({
@@ -14,7 +14,6 @@ export default function VoterLogin({
 }: {
     election: IElection
 }) {
-    const router = useRouter();
     const [nid, setNid] = useState("");
     const [isAlertShow, setAlertShow] = useState(false);
     const [isPending, setIsPending] = useState(false);
@@ -29,7 +28,7 @@ export default function VoterLogin({
             setIsPending(false)
             setMessage("There is no voter with this nid")
         } else {
-            router.push("/vote");
+            redirect(`/vote?nid=${voter.nid}&electionId=${election.id}`);
         }
     }
 

@@ -4,8 +4,6 @@ import { Nodemailer } from "@/lib/nodemailer";
 
 export async function POST(req: NextRequest) {
     const { email } = await req.json();
-    if (email != process.env.ADMIN_EMAIL)
-        return NextResponse.json({ success: false }, { status: 401 });
 
     const token = await createToken({ email }, 60 * 5);
     const link = `${req.nextUrl.origin}/api/auth/callback?token=${token}`;

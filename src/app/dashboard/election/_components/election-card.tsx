@@ -50,7 +50,7 @@ export function ElectionCard(
                                     {
                                         type === ElectionType.RUNNING &&
                                         (
-                                            <Link href={"/vote"}>
+                                            <Link href={`/vote/login/${election.id}`}>
                                                 <Button className="w-fit bg-blue-500 text-white font-bold">Vote</Button>
                                             </Link>
                                         )

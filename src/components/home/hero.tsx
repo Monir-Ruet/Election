@@ -26,12 +26,6 @@ export function Hero() {
           cryptographic security. Built on Etherium blockchain for fast, low-cost transactions.
         </p>
         <div className="mt-10 flex items-center justify-center gap-x-6">
-          <Link href="/vote">
-            <Button size="lg" className="px-8">
-              <Vote className="mr-2 h-4 w-4" />
-              Vote
-            </Button>
-          </Link>
           <Link href="/dashboard">
             <Button variant="outline" size="lg" className="px-8">
               Dashboard
