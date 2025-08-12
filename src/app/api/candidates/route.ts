@@ -1,18 +1,42 @@
+import { ICandidate } from "@/app/dashboard/candidate/types/candidate";
 import { ElectionContract } from "@/lib/election";
 import { Result } from "@/lib/result";
+import { convertObjectBigIntToString } from "@/lib/utils";
 import { validateRequest } from "@/lib/validate";
 import { candidateCreateSchema } from "@/schemas/candidates/candidate-create-schema";
 import { candidateUpdateSchema } from "@/schemas/candidates/candidate-update-schema";
 import { ContractError } from "@/types/error";
 import { NextRequest } from "next/server";
 
+export async function GET(req: NextRequest) {
+    try {
+        const electionId = Number(req.nextUrl.searchParams.get("electionId"));
+        if (!electionId || isNaN(electionId))
+            return Result.json(400, "Invalid request");
+        const candidates = await ElectionContract.CandidatesByElection(electionId);
+        const convertedCandidates = convertObjectBigIntToString(candidates);
+        const mappedCandidates = convertedCandidates.map((e) => {
+            return {
+                voteCount: Number(e[0]),
+                id: Number(e[1]),
+                active: e[2],
+                name: e[3],
+                image: e[4],
+            }
+        })
+        return Result.json(200, "success", mappedCandidates);
+    } catch (error) {
+        return Result.json(500, (error as ContractError)?.reason ?? 'Failed to retrieve candidates');
+    }
+}
+
 export async function POST(req: NextRequest) {
     const validation = await validateRequest(req, candidateCreateSchema);
     if (!validation.success) return validation.response;
-    const { name, electionId } = validation.data;
+    const { name, electionId, image, active } = validation.data;
 
     try {
-        const tx = await ElectionContract.CreateCandidate(electionId, name, "", true);
+        const tx = await ElectionContract.CreateCandidate(electionId, name, image ?? "", active ?? true);
         await tx.wait();
         if (!tx) throw new Error("Transaction failed");
         return Result.json(201, `Candidate registration with name ${name} successful`, { transactionHash: tx.hash });

@@ -15,8 +15,16 @@ export async function GET(req: NextRequest, { params }: { params: Promise<{ id: 
         if (!election || election.name === "") {
             return Result.json(404, "Election not found");
         }
-
-        return Result.json(200, "success", convertObjectBigIntToString(election));
+        const e = convertObjectBigIntToString(election);
+        const mappedElection = {
+            id: Number(e[0]),
+            startTime: Number(e[1]),
+            endTime: Number(e[2]),
+            voterCount: Number(e[3]),
+            name: e[4],
+            description: e[5],
+        }
+        return Result.json(200, "success", mappedElection);
     }
     catch (error) {
         return Result.json(500, (error as ContractError)?.reason ?? 'Failed to retrieve election');

@@ -5,11 +5,33 @@ import { electionCreateSchema } from "@/schemas/elections/election-create-schema
 import { Result } from "@/lib/result";
 import { convertObjectBigIntToString } from "@/lib/utils";
 import { ContractError } from "@/types/error";
+import { ElectionStructOutput } from "../../../../typechain-types/BCElection";
+import { IElection } from "@/app/dashboard/election/_types/election";
 
 export async function GET(req: NextRequest) {
     try {
-        const elections = await ElectionContract.ActiveElections();
-        return Result.json(200, "success", convertObjectBigIntToString(elections));
+        const type = Number(req.nextUrl.searchParams.get("type"));
+        if (!type)
+            return Result.json(400, "Invalid request");
+        let elections: ElectionStructOutput[] = [];
+        if (type == 1)
+            elections = await ElectionContract.RunningElections();
+        else if (type == 2)
+            elections = await ElectionContract.ArchievedElections();
+        else if (type == 3)
+            elections = await ElectionContract.PendingElections();
+        const convertedElections = convertObjectBigIntToString(elections);
+        const mappedElections: IElection[] = convertedElections.map((e) => {
+            return {
+                id: Number(e[0]),
+                startTime: Number(e[1]),
+                endTime: Number(e[2]),
+                voteCount: Number(e[3]),
+                name: e[4],
+                description: e[5],
+            }
+        })
+        return Result.json(200, "success", mappedElections);
     } catch (error) {
         return Result.json(500, (error as ContractError)?.reason ?? 'Failure in fetching elections');
     }
@@ -21,10 +43,10 @@ export async function POST(req: NextRequest) {
 
         if (!validation.success) return validation.response;
 
-        const { name, description, startDate, endDate, active } = validation.data;
-        const u_startDate = Math.floor(new Date(startDate).getTime() / 1000);
-        const u_endDate = Math.floor(new Date(endDate).getTime() / 1000);
-        const tx = await ElectionContract.CreateElection(name, description, u_startDate, u_endDate, active);
+        const { name, description, startTime, endTime } = validation.data;
+        const u_startTime = Math.floor(new Date(startTime).getTime());
+        const u_endTime = Math.floor(new Date(endTime).getTime());
+        const tx = await ElectionContract.CreateElection(name, description, u_startTime, u_endTime);
         await tx.wait();
         if (!tx) throw new Error("Transaction failed");
 
