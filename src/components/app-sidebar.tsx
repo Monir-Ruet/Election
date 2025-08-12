@@ -13,19 +13,9 @@ import {
 
 const items = [
     {
-        title: "Home",
-        url: "/",
-        icon: Home,
-    },
-    {
         title: "Elections",
         url: "/dashboard/election",
         icon: Vote,
-    },
-    {
-        title: "Candidates",
-        url: "/dashboard/candidate",
-        icon: Users,
     },
     {
         title: "Voters",

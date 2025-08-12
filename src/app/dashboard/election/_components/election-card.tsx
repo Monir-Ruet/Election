@@ -1,13 +1,13 @@
 import { Card, CardHeader, CardDescription, CardTitle, CardAction, CardFooter } from "@/components/ui/card"
 import { cn } from "@/lib/utils"
-import { Edit, BadgeCheckIcon, View } from "lucide-react"
+import { BadgeCheckIcon } from "lucide-react"
 import { Badge } from "@/components/ui/badge"
 import Link from "next/link"
 import { Button } from "@/components/ui/button"
 import { IElection } from "../_types/election"
 import { ElectionType } from "../_types/election-type"
 import { EditElectionForm } from "./edit-election-modal"
-import { CreateCandidateForm } from "../../candidate/_components/add-candidate-modal"
+import { AddCandidateForm } from "../../candidate/_components/candidate-modal"
 
 export function ElectionCard(
     {
@@ -44,7 +44,7 @@ export function ElectionCard(
                                     {
                                         type === ElectionType.PENDING &&
                                         (
-                                            <CreateCandidateForm election={election} />
+                                            <AddCandidateForm election={election} />
                                         )
                                     }
                                     {
@@ -66,7 +66,7 @@ export function ElectionCard(
                                                 "Archived")}
                                     </Badge>
                                 </div>
-                                <div className="text-muted-foreground">{new Date(election.startDate).toDateString()} - {new Date(election.endDate).toDateString()}</div>
+                                <div className="text-muted-foreground">{new Date(election.startTime).toDateString()} - {new Date(election.endTime).toDateString()}</div>
                             </CardFooter>
                         </Card>
                     )

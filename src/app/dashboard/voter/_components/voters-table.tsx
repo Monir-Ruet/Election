@@ -24,58 +24,58 @@ import {
     TableHeader,
     TableRow,
 } from "@/components/ui/table"
-import { ICandidate } from "../types/candidate"
-import { IElection } from "../../election/_types/election"
-import { AddCandidateForm } from "./candidate-modal"
+import { IVoter } from "@/app/dashboard/voter/_types/Voter"
+import AddVoterModal from "@/app/dashboard/voter/_components/voter-modal"
 
 
-export function Candidates(
+export const columns: ColumnDef<IVoter>[] = [
     {
-        election,
-        candidates
-    }: {
-        election: IElection,
-        candidates: ICandidate[]
-    }) {
-    const columns: ColumnDef<ICandidate>[] = [
-        {
-            id: "select",
-            header: ({ table }) => (
-                <Checkbox
-                    checked={
-                        table.getIsAllPageRowsSelected() ||
-                        (table.getIsSomePageRowsSelected() && "indeterminate")
-                    }
-                    onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
-                />
-            ),
-            cell: ({ row }) => (
-                <Checkbox
-                    checked={row.getIsSelected()}
-                    onCheckedChange={(value) => row.toggleSelected(!!value)}
-                />
-            ),
-        },
-        {
-            accessorKey: "id",
-            header: () => <div className="text-center">Id</div>,
-            cell: ({ row }) => <div className="capitalize text-center">{row.getValue("id")}</div>
-        },
-        {
-            accessorKey: "name",
-            header: () => <div className="text-center">Name</div>,
-            cell: ({ row }) => <div className="capitalize text-center">{row.getValue("name")}</div>
-        },
-        {
-            id: "actions",
-            cell: ({ row }) => (
-                <div className="text-center">
-                    <AddCandidateForm election={election} candidate={row.original} />
-                </div>
-            ),
-        }
-    ];
+        id: "select",
+        header: ({ table }) => (
+            <Checkbox
+                checked={
+                    table.getIsAllPageRowsSelected() ||
+                    (table.getIsSomePageRowsSelected() && "indeterminate")
+                }
+                onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
+                aria-label="Select all"
+            />
+        ),
+        cell: ({ row }) => (
+            <Checkbox
+                checked={row.getIsSelected()}
+                onCheckedChange={(value) => row.toggleSelected(!!value)}
+                aria-label="Select row"
+            />
+        ),
+    },
+    {
+        accessorKey: "name",
+        header: ({ column }) => <div className="text-center">Name</div>,
+        cell: ({ row }) => <div className="capitalize text-center">{row.getValue("name")}</div>
+    },
+    {
+        accessorKey: "nid",
+        header: ({ column }) => <div className="text-center">Nid</div>,
+        cell: ({ row }) => <div className="text-center lowercase">{row.getValue("nid")}</div>,
+    },
+    {
+        id: "actions",
+        enableHiding: false,
+        cell: ({ row }) => {
+            const voter = row.original
 
+            return (
+                <div className="text-center">
+                    <AddVoterModal voter={voter} />
+                </div>
+
+            )
+        },
+    },
+]
+
+export function Voters({ voters }: { voters: IVoter[] }) {
     const [sorting, setSorting] = React.useState<SortingState>([])
     const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
         []
@@ -85,7 +85,7 @@ export function Candidates(
     const [rowSelection, setRowSelection] = React.useState({})
 
     const table = useReactTable({
-        data: candidates,
+        data: voters,
         columns,
         onSortingChange: setSorting,
         onColumnFiltersChange: setColumnFilters,

@@ -1,10 +1,10 @@
 'use client'
 
 import { Card, CardContent } from "@/components/ui/card";
-import { ElectionCountdown } from "@/app/dashboard/election/_components/election-countdown";
-import { IElection } from "@/app/dashboard/election/_types/election";
-import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
+import { useState, useEffect } from "react";
+import { ElectionCountdown } from "../../_components/election-countdown";
+import { IElection } from "../../_types/election";
 import { ElectionResult } from "./election-result-modal";
 
 export default function ElectionInformation(
@@ -16,8 +16,8 @@ export default function ElectionInformation(
     const router = useRouter();
     const [now, setNow] = useState<number | null>(null);
 
-    const start = typeof election.startDate === 'string' ? new Date(election.startDate).getTime() : election.startDate;
-    const end = typeof election.endDate === 'string' ? new Date(election.endDate).getTime() : election.endDate;
+    const start = typeof election.startTime === 'string' ? new Date(election.startTime).getTime() : election.startTime;
+    const end = typeof election.endTime === 'string' ? new Date(election.endTime).getTime() : election.endTime;
 
     useEffect(() => {
         setNow(Date.now());

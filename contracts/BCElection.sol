@@ -51,7 +51,7 @@ contract BCElection {
     }
 
     modifier beforeElection(uint id) {
-        require(block.timestamp < elections[id].startTime, "Election already started");
+        require(block.timestamp * 1000 < elections[id].startTime, "Election already started");
         _;
     }
 
@@ -78,7 +78,7 @@ contract BCElection {
 
     function CreateElection(string memory name, string memory description, uint startTime, uint endTime)
         external onlyOwner {
-        require(startTime < endTime && endTime > block.timestamp, "Invalid time");
+        require(startTime < endTime && startTime > block.timestamp * 1000, "Please select future time");
 
         electionCount++;
         elections[electionCount] = Election({
@@ -95,7 +95,7 @@ contract BCElection {
 
     function UpdateElection(uint id, string memory name, string memory description, uint startTime, uint endTime)
         external onlyOwner electionExists(id) beforeElection(id) {
-        require(startTime < endTime && endTime > block.timestamp, "Invalid time");
+        require(startTime < endTime && startTime > block.timestamp * 1000, "Please select future time");
 
         Election storage e = elections[id];
         e.name = name;
@@ -130,7 +130,7 @@ contract BCElection {
     function Vote(string memory nid, uint eid, uint cid)
         external onlyOwner electionExists(eid) {
         Election storage e = elections[eid];
-        require(block.timestamp >= e.startTime && block.timestamp <= e.endTime, "Out of time");
+        require(block.timestamp * 1000 >= e.startTime && block.timestamp * 1000 <= e.endTime, "Out of time");
         require(cid > 0 && cid <= e.candidateCount, "Invalid candidate");
         require(bytes(voters[nid].name).length > 0, "Not registered");
         require(hasVoted[nid][eid] == 0, "Already voted");
@@ -222,9 +222,9 @@ contract BCElection {
 
         for (uint i = 1; i <= electionCount; ++i) {
             Election storage e = elections[i];
-            if ((electionType == 1 && block.timestamp >= e.startTime && block.timestamp <= e.endTime) ||
-                 (electionType == 2 && (block.timestamp > e.endTime)) ||
-                 (electionType == 3 && block.timestamp < e.startTime)) {
+            if ((electionType == 1 && block.timestamp * 1000 >= e.startTime && block.timestamp * 1000 <= e.endTime) ||
+                 (electionType == 2 && (block.timestamp * 1000 > e.endTime)) ||
+                 (electionType == 3 && block.timestamp * 1000 < e.startTime)) {
                 ids[count++] = e.id;
             }
         }
@@ -235,5 +235,13 @@ contract BCElection {
         }
 
         return filtered;
+    }
+
+    function VoterCount() external view returns (uint) {
+        return voterNids.length;
+    }
+
+    function ElectionCount() external view returns (uint) {
+        return electionCount;
     }
 }

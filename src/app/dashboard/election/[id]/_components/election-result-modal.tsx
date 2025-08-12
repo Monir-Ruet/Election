@@ -9,56 +9,15 @@ import {
 } from "@/components/ui/dialog"
 import { IElection } from "../../_types/election"
 import { ICandidate } from "@/app/dashboard/candidate/types/candidate"
+import { GetCandidatesByElectionId } from "@/services/election-service"
 
-const candidates: ICandidate[] = [
-    {
-        voteCount: 1,
-        id: 0,
-        active: true,
-        name: "Monir Hossain",
-        image: "dsnala"
-    },
-    {
-        voteCount: 2,
-        id: 1,
-        active: true,
-        name: "Monir Hossain",
-        image: "dsnala"
-    },
-    {
-        voteCount: 2,
-        id: 1,
-        active: true,
-        name: "Monir Hossain",
-        image: "dsnala"
-    },
-    {
-        voteCount: 2,
-        id: 1,
-        active: true,
-        name: "Monir Hossain",
-        image: "dsnala"
-    }, {
-        voteCount: 2,
-        id: 1,
-        active: true,
-        name: "Monir Hossain",
-        image: "dsnala"
-    },
-    {
-        voteCount: 2,
-        id: 1,
-        active: true,
-        name: "Monir Hossain",
-        image: "dsnala"
-    }
-]
-
-export function ElectionResult({
+export async function ElectionResult({
     election,
 }: {
     election: IElection,
 }) {
+    const candidates: ICandidate[] = (await GetCandidatesByElectionId(election.id)).data;
+
     const chartData = candidates?.map(candidate => {
         return {
             name: candidate.name,

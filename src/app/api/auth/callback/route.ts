@@ -11,8 +11,8 @@ export async function GET(req: NextRequest) {
     if (!payload || typeof payload === 'string' || !(payload as JwtPayload).email)
         return NextResponse.redirect(new URL("/login", req.url));
 
-    const sessionToken = await createToken({ email: (payload as JwtPayload).email }, 15 * 60);
-    const redirectUrl = new URL("/dashboard", req.url);
+    const sessionToken = await createToken({ email: (payload as JwtPayload).email }, 2 * 24 * 60 * 60);
+    const redirectUrl = new URL("/", req.url);
     const res = NextResponse.redirect(redirectUrl);
     res.cookies.set("session", sessionToken, { httpOnly: true, path: "/" });
     return res;

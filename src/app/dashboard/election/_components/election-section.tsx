@@ -1,90 +1,46 @@
 import { ElectionCard } from "@/app/dashboard/election/_components/election-card";
 import { ElectionType } from "@/app/dashboard/election/_types/election-type";
+import { Result } from "@/lib/result";
+import { fetchElections } from "@/services/election-service";
+import { IElection } from "../_types/election";
 
-const data = [
-  {
-    id: 6,
-    name: "Bangladesh National Election",
-    startDate: 1754631900732,
-    endDate: 1754631900732,
-    description: "Bangladesh National Election organized by bangladesh election commission"
-  },
-  {
-    id: 1,
-    name: "Bangladesh National Election",
-    startDate: 1754631900732,
-    endDate: 1754631900732,
-    description: "Bangladesh National Election organized by bangladesh election commission"
-  },
-  {
-    id: 2,
-    name: "Bangladesh National Election",
-    startDate: 1754631900732,
-    endDate: 1754631900732,
-    description: "Bangladesh National Election organized by bangladesh election commission"
-  },
-  {
-    id: 3,
-    name: "Bangladesh National Election",
-    startDate: 1954631900732,
-    endDate: 2754631900732,
-    description: "Bangladesh National Election organized by bangladesh election commission"
-  },
-  {
-    id: 4,
-    name: "Bangladesh National Election",
-    startDate: 1754631900732,
-    endDate: 1854631900732,
-    description: "Bangladesh National Election organized by bangladesh election commission"
-  },
-  {
-    id: 5,
-    name: "Bangladesh National Election",
-    startDate: 1754631900732,
-    endDate: 1854631900732,
-    description: "Bangladesh National Election organized by bangladesh election commission"
-  }
-]
+export async function ElectionListSection() {
+  const runningElections: Result<IElection[]> = await fetchElections(1);
+  const archievedElections: Result<IElection[]> = await fetchElections(2);
+  const pendingElections: Result<IElection[]> = await fetchElections(3);
 
-export function ElectionListSection() {
-  const runningElections = data.filter((election) => {
-    return Date.now() >= election.startDate && Date.now() <= election.endDate;
-  });
-  const pendingElections = data.filter((election) => {
-    return Date.now() < election.startDate;
-  });
-  const archievedElections = data.filter((election) => {
-    return Date.now() > election.endDate;
-  });
+  const runningElectionData = runningElections.data;
+  const pendingElectionData = pendingElections.data;
+  const archievedElectionData = archievedElections.data;
 
   return (
     <div className="flex flex-col gap-4 md:gap-6">
       {
-        runningElections.length > 0 &&
+        runningElectionData && runningElectionData.length > 0 &&
         (
           <div className="flex flex-col gap-4 md:gap-6">
             <h2 className="text-2xl font-semibold text-green-500">Running Elections</h2>
-            <ElectionCard data={runningElections} type={ElectionType.RUNNING} />
+            <ElectionCard data={runningElectionData} type={ElectionType.RUNNING} />
           </div>
         )
       }
 
       {
-        pendingElections.length > 0 &&
+        pendingElectionData && pendingElectionData.length > 0 &&
         (
           <div className="flex flex-col gap-4 md:gap-6">
             <h2 className="text-2xl font-semibold text-yellow-500">Pending Elections</h2>
-            <ElectionCard data={pendingElections} type={ElectionType.PENDING} />
+            <ElectionCard data={pendingElectionData} type={ElectionType.PENDING} />
           </div>
         )
       }
 
       {
-        archievedElections.length > 0 &&
+        archievedElectionData && archievedElectionData.length > 0 &&
         (
           <div className="flex flex-col gap-4 md:gap-6">
             <h2 className="text-2xl font-semibold text-red-500">Archieved Elections</h2>
-            <ElectionCard data={archievedElections} type={ElectionType.ARCHIVED} />
+            <ElectionCard data={archievedElectionData} type={ElectionType.ARCHIVED} />
           </div>
         )
       }

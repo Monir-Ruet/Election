@@ -1,4 +1,4 @@
-import { ElectionForm } from "@/app/dashboard/election/_components/create-election-form"
+import { ElectionForm } from "@/app/dashboard/election/_components/election-form"
 import { Edit } from "lucide-react"
 import { IElection } from "../_types/election"
 import {

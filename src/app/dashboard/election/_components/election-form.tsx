@@ -25,24 +25,23 @@ export function ElectionForm({ election }: { election: IElection | undefined }) 
       id: election?.id ?? 0,
       name: election?.name ?? "",
       description: election?.description ?? "",
-      startDate: election?.startDate
-        ? new Date(election.startDate).toISOString().slice(0, 16)
+      startTime: election?.startTime
+        ? new Date(election.startTime).toISOString()
         : "",
-      endDate: election?.endDate
-        ? new Date(election.endDate).toISOString().slice(0, 16)
+      endTime: election?.endTime
+        ? new Date(election.endTime).toISOString()
         : "",
     },
   });
 
   const onSubmit = async (data: ElectionCreateForm) => {
-    console.log(data)
     const promise = () => new Promise<Result<unknown>>(async (resolve, reject) => {
       try {
         const election = {
           name: data.name,
           description: data.description,
-          startDate: data.startDate,
-          endDate: data.endDate,
+          startTime: data.startTime,
+          endTime: data.endTime,
         };
         const response = await axios.post<Result<unknown>>("/api/elections", JSON.stringify(election), {
           headers: {
@@ -88,22 +87,22 @@ export function ElectionForm({ election }: { election: IElection | undefined }) 
       </div>
       <div className="flex items-start gap-2 justify-between">
         <div className="flex flex-col gap-3">
-          <Label htmlFor="startDate">Start Date & Time <span className="text-red-500">*</span></Label>
+          <Label htmlFor="startTime">Start Date & Time <span className="text-red-500">*</span></Label>
           <Input
-            id="startDate"
+            id="startTime"
             type="datetime-local"
-            {...register('startDate')}
+            {...register('startTime')}
           />
-          {errors.startDate && <p className="text-sm text-red-500">{errors.startDate.message}</p>}
+          {errors.startTime && <p className="text-sm text-red-500">{errors.startTime.message}</p>}
         </div>
         <div className="flex flex-col gap-3">
-          <Label htmlFor="endDate">End Date & Time <span className="text-red-500">*</span></Label>
+          <Label htmlFor="endTime">End Date & Time <span className="text-red-500">*</span></Label>
           <Input
-            id="endDate"
+            id="endTime"
             type="datetime-local"
-            {...register('endDate')}
+            {...register('endTime')}
           />
-          {errors.endDate && <p className="text-sm text-red-500">{errors.endDate.message}</p>}
+          {errors.endTime && <p className="text-sm text-red-500">{errors.endTime.message}</p>}
         </div>
       </div>
 

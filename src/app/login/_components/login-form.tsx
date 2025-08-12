@@ -83,7 +83,7 @@ export function LoginForm({
                 placeholder="m@example.com"
                 required
               />
-              <Button type="submit" className="w-full">
+              <Button type="submit" className="w-full" disabled={isPending}>
                 {
                   isPending ? <Loader2 /> : "Sign In"
                 }
