@@ -29,9 +29,9 @@ export function ElectionResult({
 
     useEffect(() => {
         GetCandidatesByElectionId(election.id).then(res => {
-            let candidateData: ICandidate[] = res.data
+            const candidateData: ICandidate[] = res.data
             setCandidates(candidateData)
-            let data = candidateData?.map(candidate => {
+            const data = candidateData?.map(candidate => {
                 return {
                     name: candidate.name,
                     count: candidate.voteCount
