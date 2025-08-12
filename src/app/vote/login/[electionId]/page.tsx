@@ -6,7 +6,7 @@ import { IElection } from "@/app/dashboard/election/_types/election";
 
 export default async function VoterLoginPage({ params }: { params: Promise<{ electionId: string }> }) {
     const { electionId } = await params;
-    const election: IElection = (await GetElectionById(Number(electionId))).data;
+    const election: IElection = (await GetElectionById(Number(electionId)))?.data;
     if (!election)
         redirect("/not-found")
     return (
