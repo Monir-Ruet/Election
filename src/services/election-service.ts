@@ -1,4 +1,71 @@
+import { IElection } from "@/app/dashboard/election/_types/election";
 import api from "@/lib/axios";
+import { Result } from "@/lib/result";
+import { ca } from "zod/v4/locales";
+
+export async function CreateElection(election: unknown) {
+    try {
+        const response = await api.post<Result>("/api/elections", election, {
+            headers: {
+                "Content-Type": "application/json",
+            },
+        });
+        if (response.status != 201)
+            return false;
+        return true;
+    }
+    catch {
+        return false
+    }
+
+}
+
+export async function UpdateElection(election: unknown) {
+    try {
+        const response = await api.put<Result>("/api/elections", election, {
+            headers: {
+                "Content-Type": "application/json",
+            },
+        });
+        if (response.status != 201)
+            return false;
+        return true;
+    } catch {
+        return false
+    }
+
+}
+
+export async function CreateCandidate(candidate: unknown) {
+    try {
+        const response = await api.post<Result>("/api/candidates", JSON.stringify(candidate), {
+            headers: {
+                "Content-Type": "application/json",
+            },
+        });
+        if (response.status != 201)
+            return false;
+        return true;
+    } catch {
+        return false
+    }
+
+}
+
+export async function UpdateCandidate(candidate: unknown) {
+    try {
+        const response = await api.put<Result>("/api/candidates", JSON.stringify(candidate), {
+            headers: {
+                "Content-Type": "application/json",
+            },
+        });
+        if (response.status != 201)
+            return false;
+        return true;
+    } catch {
+        return false
+    }
+}
 
 export async function fetchElections(type: number) {
     try {

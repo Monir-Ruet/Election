@@ -6,6 +6,7 @@ import { Candidates } from "../../candidate/_components/candidates-table";
 import { Result } from "@/lib/result";
 import { NextResponse } from "next/server";
 import { ICandidate } from "@/app/dashboard/candidate/types/candidate";
+import { redirect } from "next/navigation";
 
 
 export default async function ElectionById({ params }: { params: Promise<{ id: string }> }) {
@@ -13,7 +14,7 @@ export default async function ElectionById({ params }: { params: Promise<{ id: s
     const election: Result<IElection> = await GetElectionById(Number(id));
     const candidates: Result<ICandidate[]> = await GetCandidatesByElectionId(Number(id));
     if (!election?.data || !candidates?.data) {
-        return NextResponse.redirect(new URL("/not found"))
+        redirect("/not-found")
     }
     const electionData = election.data;
     const candidatesData = candidates.data ?? [];

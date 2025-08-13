@@ -5,63 +5,64 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
-import { ElectionCreateForm, electionCreateSchema } from "@/schemas/elections/election-create-schema"
-import axios from "axios";
+import { ElectionFormSchema, electionSchema } from "@/schemas/elections/election-schema"
 import { toast } from "sonner"
 import { Textarea } from "@/components/ui/textarea"
-import { Result } from "@/lib/result"
 import { IElection } from "../_types/election"
+import { CreateElection, UpdateElection } from "@/services/election-service"
+import { Loader2 } from "lucide-react"
 
 export function ElectionForm({ election }: { election: IElection | undefined }) {
   const isCreateForm = !election;
+  const id = election?.id
   const {
     register,
     handleSubmit,
     formState: { errors, isSubmitting },
     reset,
-  } = useForm<ElectionCreateForm>({
-    resolver: zodResolver(electionCreateSchema),
+  } = useForm<ElectionFormSchema>({
+    resolver: zodResolver(electionSchema),
     defaultValues: {
-      id: election?.id ?? 0,
+      id: id ?? 0,
       name: election?.name ?? "",
       description: election?.description ?? "",
       startTime: election?.startTime
-        ? new Date(election.startTime).toISOString()
+        ? new Date(election.startTime).toDateString()
         : "",
       endTime: election?.endTime
-        ? new Date(election.endTime).toISOString()
+        ? new Date(election.endTime).toDateString()
         : "",
     },
   });
 
-  const onSubmit = async (data: ElectionCreateForm) => {
-    const promise = () => new Promise<Result<unknown>>(async (resolve, reject) => {
-      try {
-        const election = {
-          name: data.name,
-          description: data.description,
-          startTime: data.startTime,
-          endTime: data.endTime,
-        };
-        const response = await axios.post<Result<unknown>>("/api/elections", JSON.stringify(election), {
-          headers: {
-            "Content-Type": "application/json",
-          },
-        });
-        return resolve(response.data);
-      } catch (error) {
-        reject(error);
-      }
-    });
+  const onSubmit = async (data: ElectionFormSchema) => {
+    const electionData = {
+      name: data.name,
+      description: data.description,
+      startTime: new Date(data.startTime),
+      endTime: new Date(data.endTime),
+      id: data.id ?? 0
+    }
+    let isSuccess = false;
+    if (isCreateForm) {
+      isSuccess = await CreateElection(electionData);
+    } else {
+      isSuccess = await UpdateElection(electionData);
+    }
 
-    toast.promise(promise, {
-      loading: 'Loading...',
-      success: (data) => {
-        reset();
-        return `${data?.message || "Election created successfully!"}`;
-      },
-      error: 'Failed to create election. Please try again.',
-    });
+    if (isSuccess) {
+
+      if (isCreateForm)
+        toast.success("Election created successfully");
+      else
+        toast.success("Election updated successfully")
+      reset();
+    } else {
+      if (isCreateForm)
+        toast.error("Failed to create election");
+      else
+        toast.error("Failed to update election")
+    }
   };
 
   return (
@@ -113,7 +114,7 @@ export function ElectionForm({ election }: { election: IElection | undefined }) 
         }
         {
           isSubmitting &&
-          (!isCreateForm ? "Creating..." : "Updating...")
+          <Loader2 className="animate-spin" />
         }
       </Button>
     </form>
