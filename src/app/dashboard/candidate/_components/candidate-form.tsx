@@ -10,10 +10,9 @@ import { toast } from "sonner"
 import { IElection } from "@/app/dashboard/election/_types/election"
 import { CandidateCreateForm, candidateCreateSchema } from "@/schemas/candidates/candidate-create-schema"
 import { Loader2 } from "lucide-react"
-import api from "@/lib/axios"
-import { Result } from "@/lib/result"
 import { ICandidate } from "../types/candidate"
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
+import { CreateCandidate, UpdateCandidate } from "@/services/election-service"
 
 export function CandidateForm({
   election,
@@ -22,6 +21,7 @@ export function CandidateForm({
   election: IElection,
   candidate?: ICandidate | undefined
 }) {
+  const isCreateForm = !candidate;
   const [preview, setPreview] = useState<string | null>(null)
   const [active, setActive] = useState(true);
 
@@ -41,25 +41,32 @@ export function CandidateForm({
   });
 
   const onSubmit = async (data: CandidateCreateForm) => {
-    try {
-      const candidateInfo = {
-        electionId: data.electionId,
-        name: data.name,
-        active: active
-      };
+    const candidateInfo = {
+      electionId: data.electionId,
+      candidateId: `${candidate?.id ?? 0}`,
+      name: data.name,
+      active: active,
+      image: data.image
+    };
 
-      const response = await api.post<Result<unknown>>("/api/candidates", candidateInfo, {
-        headers: {
-          "Content-Type": "application/json",
-        },
-      });
+    let isSuccess = false;
+    if (isCreateForm) {
+      isSuccess = await CreateCandidate(candidateInfo)
+    } else {
+      isSuccess = await UpdateCandidate(candidateInfo)
+    }
+    if (isSuccess) {
 
-      if (response.status !== 201) throw new Error();
+      if (isCreateForm)
+        toast.success("Candidate created successfully");
+      else
+        toast.success("Candidate updated successfully")
       reset();
-      setPreview(null);
-      toast.success("Candidate added successfully");
-    } catch (error) {
-      toast.error("Failed to add candidate. Please try again.");
+    } else {
+      if (isCreateForm)
+        toast.error("Failed to create candidate");
+      else
+        toast.error("Failed to update candidate")
     }
   };
 
@@ -120,7 +127,13 @@ export function CandidateForm({
       </RadioGroup>
 
       <Button type="submit" className="w-full" disabled={isSubmitting}>
-        {isSubmitting ? <Loader2 className="animate-spin" /> : "Add Candidate"}
+        {
+          !isSubmitting &&
+          (isCreateForm ? "Add Candidate" : "Update Candidate")
+        }
+        {
+          isSubmitting && <Loader2 className="animate-spin" />
+        }
       </Button>
     </form>
   );
