@@ -13,7 +13,7 @@ export default async function ElectionResultCards(
         candidates: ICandidate[]
     }) {
     const totalVotes = candidates.map(m => m.voteCount).reduce((a, b) => a + b, 0);
-    const totalVoterCount = (await GetVoterCount())?.data ?? 0;
+    const totalVoterCount = 2;
 
     return (
         <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
@@ -58,7 +58,7 @@ export default async function ElectionResultCards(
                     <div className="flex items-center justify-between">
                         <div>
                             <p className="text-sm font-medium text-gray-600">Avg. Participation</p>
-                            <p className="text-2xl font-bold">{totalVoterCount == 0 ? 0 : Math.floor(totalVotes / totalVoterCount * 100)}%</p>
+                            <p className="text-2xl font-bold">{!totalVoterCount ? 0 : Math.floor(totalVotes / totalVoterCount * 100)}%</p>
                         </div>
                         <TrendingUp className="h-8 w-8 text-orange-600" />
                     </div>

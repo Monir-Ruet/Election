@@ -1,7 +1,7 @@
 import { NextRequest } from "next/server";
 import { ElectionContract } from '@/lib/election';
 import { validateRequest } from "@/lib/validate";
-import { electionCreateSchema } from "@/schemas/elections/election-create-schema";
+import { electionSchema } from "@/schemas/elections/election-schema";
 import { Result } from "@/lib/result";
 import { convertObjectBigIntToString } from "@/lib/utils";
 import { ContractError } from "@/types/error";
@@ -39,14 +39,36 @@ export async function GET(req: NextRequest) {
 
 export async function POST(req: NextRequest) {
     try {
-        const validation = await validateRequest(req, electionCreateSchema);
-
+        const validation = await validateRequest(req, electionSchema);
         if (!validation.success) return validation.response;
+        console.log(validation.data)
 
         const { name, description, startTime, endTime } = validation.data;
         const u_startTime = Math.floor(new Date(startTime).getTime());
         const u_endTime = Math.floor(new Date(endTime).getTime());
         const tx = await ElectionContract.CreateElection(name, description, u_startTime, u_endTime);
+        await tx.wait();
+        if (!tx) throw new Error("Transaction failed");
+
+        return Result.json(201, "Election created successfully", { txHash: tx.hash });
+    } catch (error) {
+        return Result.json(500, (error as ContractError)?.reason ?? 'Failed to create election');
+    }
+}
+
+
+export async function PUT(req: NextRequest) {
+    try {
+        const validation = await validateRequest(req, electionSchema);
+
+        if (!validation.success) return validation.response;
+
+        const { id, name, description, startTime, endTime } = validation.data;
+        if (!id)
+            return Result.json(400, "Invalid request");
+        const u_startTime = Math.floor(new Date(startTime).getTime());
+        const u_endTime = Math.floor(new Date(endTime).getTime());
+        const tx = await ElectionContract.UpdateElection(id, name, description, u_startTime, u_endTime);
         await tx.wait();
         if (!tx) throw new Error("Transaction failed");
 
