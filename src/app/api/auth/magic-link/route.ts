@@ -1,9 +1,15 @@
 import { NextRequest, NextResponse } from "next/server";
 import { createToken } from "@/lib/jwt";
 import { Nodemailer } from "@/lib/nodemailer";
+import { isExternalAuthEnabled, requestMagicLink } from "@/lib/auth-external";
 
 export async function POST(req: NextRequest) {
     const { email } = await req.json();
+
+    if (isExternalAuthEnabled()) {
+        await requestMagicLink(email);
+        return NextResponse.json({ success: true });
+    }
 
     const token = await createToken({ email }, 60 * 5);
     const link = `${req.nextUrl.origin}/api/auth/callback?token=${token}`;
