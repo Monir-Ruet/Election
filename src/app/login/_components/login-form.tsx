@@ -52,9 +52,7 @@ export function LoginForm({
       <Card>
         <CardHeader className="text-center">
           <CardTitle className="text-xl">Welcome back</CardTitle>
-          <CardDescription>
-            Login to the Evoting Dapp
-          </CardDescription>
+          <CardDescription>Sign in with your email to continue</CardDescription>
         </CardHeader>
         <CardContent>
           <form onSubmit={handleSubmit}>
